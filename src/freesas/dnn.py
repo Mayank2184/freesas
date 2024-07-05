@@ -1,3 +1,4 @@
+import io
 import numpy as np
 import json
 import h5py
@@ -28,8 +29,11 @@ activation_functions = {
 
 # Parse config.json
 def parse_config(config_path):
-    with open(config_path, 'r') as f:
-        config = json.load(f)
+    if isinstance(config_path, io.IOBase):
+        config = json.load(config_path)
+    elif os.path.exists(config_path):
+        with open(config_path, 'r') as f:
+            config = json.load(f)
     
     layer_dims = []
     activations = []
